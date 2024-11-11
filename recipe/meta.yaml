@@ -10,21 +10,23 @@ source:
   sha256: dbbade58f12c6a6da6062f4b045a6395a8d4195815e3e064bc3e609b69c8a26c
 
 build:
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  skip: True  # [py<37]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
 
 requirements:
   host:
-    - python >=3.7
+    - python
     - pip
+    - setuptools
+    - wheel
   run:
-    - python >=3.7
-    - keras-tuner
+    - python
 
 test:
   imports:
-    - kerastuner
+    # can't import due to circular dependency issue with keras-tuner
+    # - kerastuner
   commands:
     - pip check
   requires:
@@ -33,8 +35,15 @@ test:
 about:
   home: https://github.com/haifeng-jin/kt-legacy
   summary: Legacy import names for Keras Tuner
+  description: |
+    This repository is to support the deprecated import name of Keras Tuner.
+    With this repo, you can import Keras Tuner as kerastuner.
+    In the main Keras Tuner repository the import name has been changed to keras_tuner.
   license: Apache-2.0
   license_file: LICENSE
+  license_family: Apache
+  doc_url: https://github.com/haifeng-jin/kt-legacy
+  dev_url: https://github.com/haifeng-jin/kt-legacy
 
 extra:
   recipe-maintainers:
